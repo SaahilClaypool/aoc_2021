@@ -2,6 +2,9 @@ module Aoc.Solutions.Day01
 
 open Aoc.Runner
 
+// alias CList to c# list for interop
+type CList<'T> = System.Collections.Generic.List<'T>
+
 let parseInput (text: string) = text.Split('\n') |> Seq.map int
 
 let pairs sequence =
@@ -40,3 +43,22 @@ type Day01() =
 
         let paired = pairs avg
         (solveA paired).ToString()
+
+    override this.Tests =
+        [ new Test(
+              name = "basic part A",
+              input =
+                  @"199
+200
+208
+210
+200
+207
+240
+269
+260
+263",
+              expectedOutput = "7",
+              solve = fun x -> this.SolveA(x)
+          ) ]
+        |> CList
