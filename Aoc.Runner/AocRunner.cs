@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using Spectre.Console;
 
 namespace Aoc.Runner
 {
@@ -26,26 +27,32 @@ namespace Aoc.Runner
         public static bool TestDay(Day day)
         {
             day.IsTest = true;
-            Console.WriteLine($"Day {day.NumberString()}");
-            var failedTests = day.Tests.Where(test =>
+            var failedTests = day.Tests.Select(test =>
             {
-                var failed = !test.Run();
-                if (!failed)
-                {
-                    Console.WriteLine($"Day {day.NumberString()}: Test {test.Name} passed!");
-                }
-                return failed;
+                var (time, passed) = TimeIt(() => test.Run());
+                return (test, failed: !passed, time);
             }).ToList();
-            foreach (var test in failedTests)
+            var color = failedTests.Any(res => res.failed) ? "red" : "green";
+            var content = new Table()
+                .AddColumn($"[{color} bold underline]{day.GetType().Name}[/]")
+                .AddColumn("name")
+                .AddColumn("expected")
+                .AddColumn("actual")
+                .AddColumn("time");
+            foreach (var (test, failed, time) in failedTests)
             {
-                Console.WriteLine($"Test {test.Name} Failed:\n\tExpected: {test.ExpectedOutput}\n\tReceived: {test.Output}");
+                content.AddRow(failed ? "[red underline]Fail[/]" : "[green]Pass[/]", test.Name, test.ExpectedOutput, test.Output, $"{time.Milliseconds}ms");
             }
+            AnsiConsole.Write(content);
             return !failedTests.Any();
         }
 
         public static bool RunDay(Day day)
         {
-            Console.WriteLine($"Day {day.NumberString()}");
+            var content = new Table()
+                .AddColumn($"[bold underline]{day.GetType().Name}[/]")
+                .AddColumn("result")
+                .AddColumn("time");
             try
             {
                 var a = "";
@@ -53,11 +60,11 @@ namespace Aoc.Runner
                 {
                     a = day.SolveA();
                 });
-                Console.WriteLine($"Part A ({elapsed.Milliseconds + elapsed.Seconds * 100}ms): {a}");
+                content.AddRow("A", a, $"{elapsed.Milliseconds + elapsed.Seconds * 100}ms");
             }
             catch (NotImplementedException)
             {
-                Console.WriteLine($"Part A for Day {day.NumberString()} is not implmented!");
+                content.AddRow("A", $"{day.NumberString()} is not implmented!", double.NaN.ToString());
             }
 
             try
@@ -67,12 +74,13 @@ namespace Aoc.Runner
                 {
                     b = day.SolveB();
                 });
-                Console.WriteLine($"Part B ({elapsed.Milliseconds + elapsed.Seconds * 100}ms): {b}");
+                content.AddRow("B", b, $"{elapsed.Milliseconds + elapsed.Seconds * 100}ms");
             }
             catch (NotImplementedException)
             {
-                Console.WriteLine($"Part B for Day {day.NumberString()} is not implmented!");
+                content.AddRow("A", $"{day.NumberString()} is not implmented!", double.NaN.ToString());
             }
+            AnsiConsole.Write(content);
             return true;
         }
 
@@ -103,6 +111,14 @@ namespace Aoc.Runner
             blockingAction();
             stopWatch.Stop();
             return stopWatch.Elapsed;
+        }
+
+        static (TimeSpan, T) TimeIt<T>(Func<T> blockingAction)
+        {
+            Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
+            var result = blockingAction();
+            stopWatch.Stop();
+            return (stopWatch.Elapsed, result);
         }
     }
     public class NoDayFound : Exception { }

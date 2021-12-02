@@ -1,20 +1,31 @@
 using System;
 using System.ComponentModel;
 using System.Linq;
-using Spectre.Cli;
+using Spectre.Console;
+using Spectre.Console.Cli;
 
 namespace Aoc.Runner
 {
     public class Cli
     {
-        public static void Run(string[] args) =>
-            CreateApp().Run(args);
+        public static void Run(string[] args)
+        {
+            try
+            {
+                CreateApp().Run(args);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Failed to run app: {e.Message}");
+            }
+        }
         public static CommandApp CreateApp()
         {
             var app = new CommandApp();
 
             app.Configure(config =>
             {
+                config.SetApplicationName("Aoc.Runner");
                 config.PropagateExceptions();
                 config.AddBranch("test", branch =>
                 {
@@ -44,9 +55,9 @@ namespace Aoc.Runner
             }
             catch (NoDayFound)
             {
-                System.Console.WriteLine($@"Could not find day {args.ProgramString()}
-                possible days: {string.Join(", ", AocRunner.Days().Select(day => day.GetType().Name))}
-                ");
+                AnsiConsole.Write(new Rule($@"[red bold underline]Could not find day {args.ProgramString()}[/]").LeftAligned());
+                AnsiConsole.WriteLine(
+                    $"possible days: {string.Join(", ", AocRunner.Days().Select(day => day.GetType().Name))}");
             }
             return 0;
         }
@@ -65,9 +76,9 @@ namespace Aoc.Runner
             }
             catch (NoDayFound)
             {
-                System.Console.WriteLine($@"Could not find day {args.ProgramString()}
-                possible days: {string.Join(", ", AocRunner.Days().Select(day => day.GetType().Name))}
-                ");
+                AnsiConsole.Write(new Rule($@"[red bold underline]Could not find day {args.ProgramString()}[/]").LeftAligned());
+                AnsiConsole.WriteLine(
+                    $"possible days: {string.Join(", ", AocRunner.Days().Select(day => day.GetType().Name))}");
             }
             return 0;
         }
