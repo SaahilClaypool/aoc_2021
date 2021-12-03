@@ -17,6 +17,7 @@ namespace Aoc.Runner
             catch (Exception e)
             {
                 Console.WriteLine($"Failed to run app: {e.Message}");
+                throw;
             }
         }
         public static CommandApp CreateApp()
