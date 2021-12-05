@@ -5,6 +5,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="fluentassertions" Version="6.2.0" />
     <PackageReference Include="SharpResult" Version="1.0.10" />
   </ItemGroup>
 

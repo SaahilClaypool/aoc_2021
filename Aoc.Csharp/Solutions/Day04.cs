@@ -1,7 +1,8 @@
-using SharpResult;
-using static SharpResult.Result;
-using static SharpResult.Option;
-using SharpResult.FunctionalExtensions;
+global using SharpResult;
+global using static SharpResult.Result;
+global using static SharpResult.Option;
+global using SharpResult.FunctionalExtensions;
+global using static System.Linq.Enumerable;
 
 namespace Aoc.Solutions.Day04;
 
