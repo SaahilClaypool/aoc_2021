@@ -6,8 +6,12 @@ public static class Fn
 
     public static void DumpDict<K, V>(this Dictionary<K, V> @this, bool indented = true) =>
         Console.WriteLine(@this.Select(kvp => $"[{kvp.Key}]: {kvp.Value}").Join("\n"));
+
     public static string ToJson<T>(this T @this, bool indented = true) =>
         System.Text.Json.JsonSerializer.Serialize(@this, options: new() { WriteIndented = indented });
+
+    public static IEnumerable<(T, int)> Indexed<T>(this IEnumerable<T> @this) => @this.Select((v, i) => (v, i));
+
     public static IEnumerable<List<T>> SplitAt<T>(this IEnumerable<T> @this, Func<T, bool> split)
     {
         var cur = new List<T>();
