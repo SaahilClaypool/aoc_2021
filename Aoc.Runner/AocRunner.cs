@@ -27,6 +27,7 @@ namespace Aoc.Runner
         public static bool TestDay(Day day)
         {
             day.IsTest = true;
+            LogHelpers.SetTest();
             var failedTests = day.Tests.Select(test =>
             {
                 var (time, passed) = TimeIt(() => test.Run());

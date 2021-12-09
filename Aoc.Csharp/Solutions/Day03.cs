@@ -72,7 +72,7 @@ public class Day03 : Day
                 break;
             }
         }
-        return (co2Rating.Value * oxyRating.Value).ToString();
+        return (co2Rating!.Value * oxyRating!.Value).ToString();
     }
 
     public Day03()
@@ -117,10 +117,10 @@ public class Day03 : Day
 
 static class LinqExt
 {
-    public static T Mode<T>(this IEnumerable<T> @this, T def = default)
+    public static T Mode<T>(this IEnumerable<T> @this, T def = default!)
     {
         var counts = @this.GroupBy(t => t);
-        var maxCount = counts.MaxBy(m => m.Count()).Count();
+        var maxCount = counts.MaxBy(m => m.Count())!.Count();
         var withMaxCount = counts.Where(c => c.Count() == maxCount);
         if (withMaxCount.Count() == 1)
         {

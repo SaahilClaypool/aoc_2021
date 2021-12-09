@@ -41,7 +41,23 @@ namespace Aoc.Runner
         public virtual string SolveA(string Input) => throw new NotImplementedException();
         public virtual string SolveB() => SolveB(GetInput());
         public virtual string SolveB(string Input) => throw new NotImplementedException();
+
     }
+    
+    public static class LogHelpers
+    {
+        private static bool IsTest = false;
+        public static void SetTest() => IsTest = true;
+
+        public static void Log(string t)
+        {
+            if (IsTest)
+            {
+                Console.WriteLine(t);
+            }
+        }
+    }
+
 
     public class Test
     {

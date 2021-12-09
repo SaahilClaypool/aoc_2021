@@ -5,10 +5,12 @@ public static class Fn
         Console.WriteLine(@this.ToJson(indented));
 
     public static T Clone<T>(this T @this) =>
-        System.Text.Json.JsonSerializer.Deserialize<T>(@this.ToJson());
+        System.Text.Json.JsonSerializer.Deserialize<T>(@this.ToJson())!;
 
-    public static void DumpDict<K, V>(this Dictionary<K, V> @this, bool indented = true) =>
+    public static void DumpDict<K, V>(this Dictionary<K, V> @this) where K: notnull
+    {
         Console.WriteLine(@this.Select(kvp => $"[{kvp.Key}]: {kvp.Value}").Join("\n"));
+    }
 
     public static string ToJson<T>(this T @this, bool indented = true) =>
         System.Text.Json.JsonSerializer.Serialize(@this, options: new() { WriteIndented = indented });
@@ -37,9 +39,9 @@ public static class Fn
     }
 }
 
-public class DefaultDict<K, V> : Dictionary<K, V>
+public class DefaultDict<K, V> : Dictionary<K, V> where K: notnull
 {
-    private readonly Func<V> _default = () => default;
+    private readonly Func<V> _default = () => default!;
     public DefaultDict()
     { }
 
@@ -55,7 +57,7 @@ public class DefaultDict<K, V> : Dictionary<K, V>
     {
         get
         {
-            if (!TryGetValue(key, out V val))
+            if (!TryGetValue(key, out V? val))
             {
                 val = _default();
                 Add(key, val);
