@@ -4,13 +4,16 @@ public static class Fn
     public static void Dump<T>(this T @this, bool indented = true) =>
         Console.WriteLine(@this.ToJson(indented));
 
+    public static T Clone<T>(this T @this) =>
+        System.Text.Json.JsonSerializer.Deserialize<T>(@this.ToJson());
+
     public static void DumpDict<K, V>(this Dictionary<K, V> @this, bool indented = true) =>
         Console.WriteLine(@this.Select(kvp => $"[{kvp.Key}]: {kvp.Value}").Join("\n"));
 
     public static string ToJson<T>(this T @this, bool indented = true) =>
         System.Text.Json.JsonSerializer.Serialize(@this, options: new() { WriteIndented = indented });
 
-    public static IEnumerable<(T, int)> Indexed<T>(this IEnumerable<T> @this) => @this.Select((v, i) => (v, i));
+    public static IEnumerable<(T Val, int Idx)> Indexed<T>(this IEnumerable<T> @this) => @this.Select((v, i) => (v, i));
 
     public static IEnumerable<List<T>> SplitAt<T>(this IEnumerable<T> @this, Func<T, bool> split)
     {
@@ -34,16 +37,27 @@ public static class Fn
     }
 }
 
-public class DefaultDict<TKey, TValue> : Dictionary<TKey, TValue> where TValue : new()
+public class DefaultDict<K, V> : Dictionary<K, V>
 {
-    public new TValue this[TKey key]
+    private readonly Func<V> _default = () => default;
+    public DefaultDict()
+    { }
+
+    /// <summary>
+    /// Provide a function to generate a default value when not present
+    /// </summary>
+    /// <param name="defaultValueGenerator">e.g. () => new List()</param>
+    public DefaultDict(Func<V> defaultValueGenerator)
+    {
+        _default = defaultValueGenerator;
+    }
+    public new V this[K key]
     {
         get
         {
-            TValue val;
-            if (!TryGetValue(key, out val))
+            if (!TryGetValue(key, out V val))
             {
-                val = new TValue();
+                val = _default();
                 Add(key, val);
             }
             return val;
