@@ -107,7 +107,6 @@ public class Day05 : Day
                     Console.Write($".");
                 }
             }
-            Console.WriteLine();
         }
     }
 

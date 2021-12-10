@@ -31,7 +31,7 @@ public class Day08 : Day
             .Split('|')
             .Select(ParseDigits)
             .ToList();
-        Console.WriteLine($"{input} {els.ToJson(false)}");
+        Log($"{input} {els.ToJson(false)}");
         return new(els[0], els[1]);
     }
 
