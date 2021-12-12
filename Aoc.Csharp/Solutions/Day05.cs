@@ -1,4 +1,4 @@
-global using FluentAssertions;
+using FluentAssertions;
 namespace Aoc.Solutions.Day05;
 
 public record Point(int X, int Y);
