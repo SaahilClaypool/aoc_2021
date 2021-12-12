@@ -61,7 +61,7 @@ namespace Aoc.Runner
                 {
                     a = day.SolveA();
                 });
-                content.AddRow("A", a, $"{elapsed.Milliseconds + elapsed.Seconds * 100}ms");
+                content.AddRow("A", a, $"{elapsed.Milliseconds + elapsed.Seconds * 1000}ms");
             }
             catch (NotImplementedException)
             {
@@ -75,7 +75,7 @@ namespace Aoc.Runner
                 {
                     b = day.SolveB();
                 });
-                content.AddRow("B", b, $"{elapsed.Milliseconds + elapsed.Seconds * 100}ms");
+                content.AddRow("B", b, $"{elapsed.Milliseconds + elapsed.Seconds * 1000}ms");
             }
             catch (NotImplementedException)
             {
