@@ -78,12 +78,12 @@ class OctoGrid : Grid<int>
 
 public class Day11 : Day
 {
-    static int ChartToInt(char c) => c - '0';
+    static int CharToInt(char c) => c - '0';
 
     static OctoGrid Parse(string input) =>
         input
         .Split('\n')
-        .Select(line => line.Select(ChartToInt).ToList())
+        .Select(line => line.Select(CharToInt).ToList())
         .ToList()
         .Then(grid => new OctoGrid(grid));
 
