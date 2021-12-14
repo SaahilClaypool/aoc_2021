@@ -45,6 +45,9 @@ public class DefaultDict<K, V> : Dictionary<K, V> where K: notnull
     public DefaultDict()
     { }
 
+    public DefaultDict(Dictionary<K, V> vals) : base(vals)
+    { }
+
     /// <summary>
     /// Provide a function to generate a default value when not present
     /// </summary>
