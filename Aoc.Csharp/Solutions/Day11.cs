@@ -1,43 +1,6 @@
 namespace Aoc.Solutions.Day11;
 
 
-public class Grid<T>
-{
-    public Grid(List<List<T>> nums)
-    {
-        State = nums;
-    }
-
-    public IEnumerable<(int r, int c)> All()
-    {
-        foreach (var r in Range(0, Rows))
-        {
-            foreach (var c in Range(0, Cols))
-            {
-                yield return (r, c);
-            }
-        }
-    }
-
-    public IEnumerable<(int r, int c)> Surrounding((int r, int c) point)
-    {
-        foreach (var r in Range(point.r - 1, 3))
-        {
-            foreach (var c in Range(point.c - 1, 3))
-            {
-                if (r >= 0 && r < Rows && c >= 0 && c < Cols && (r != point.r || c != point.c))
-                {
-                    yield return (r, c);
-                }
-            }
-        }
-    }
-
-    public List<List<T>> State { get; }
-    private int Rows => State.Count;
-    private int Cols => State[0].Count;
-}
-
 class OctoGrid : Grid<int>
 {
     public OctoGrid(List<List<int>> nums) : base(nums)

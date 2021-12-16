@@ -38,9 +38,9 @@ namespace Aoc.Runner
         }
 
         public virtual string SolveA() => SolveA(GetInput());
-        public virtual string SolveA(string Input) => throw new NotImplementedException();
+        public abstract string SolveA(string input);
         public virtual string SolveB() => SolveB(GetInput());
-        public virtual string SolveB(string Input) => throw new NotImplementedException();
+        public abstract string SolveB(string input);
 
     }
     

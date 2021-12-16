@@ -1,6 +1,8 @@
 namespace Aoc.Solutions;
 public static class Fn
 {
+    public static int CharToInt(char c) => c - '0';
+
     public static void Dump<T>(this T @this, bool indented = true) =>
         Console.WriteLine(@this.ToJson(indented));
 
@@ -69,4 +71,70 @@ public class DefaultDict<K, V> : Dictionary<K, V> where K: notnull
         }
         set { base[key] = value; }
     }
+}
+
+public class Grid<T>
+{
+    readonly bool _diag = true;
+    public T this[(int r, int c) val]
+    {
+        get => State[val.r][val.c];
+        set => State[val.r][val.c] = value;
+    }
+
+    public Grid(List<List<T>> nums)
+    {
+        State = nums;
+    }
+
+    public Grid(List<List<T>> nums, bool diag)
+    {
+        _diag = diag;
+        State = nums;
+    }
+
+    public IEnumerable<(int r, int c)> All()
+    {
+        foreach (var r in Range(0, Rows))
+        {
+            foreach (var c in Range(0, Cols))
+            {
+                yield return (r, c);
+            }
+        }
+    }
+
+    public IEnumerable<(int r, int c)> Surrounding((int r, int c) point)
+    {
+        foreach (var r in Range(point.r - 1, 3))
+        {
+            foreach (var c in Range(point.c - 1, 3))
+            {
+                if (r >= 0 && r < Rows && c >= 0 && c < Cols && (r != point.r || c != point.c)
+                    && (_diag || r == point.r || c == point.c))
+                {
+                    yield return (r, c);
+                }
+            }
+        }
+    }
+
+    public List<List<T>> State { get; }
+    public int Rows => State.Count;
+    public int Cols => State[0].Count;
+
+    public override string ToString() =>
+        State
+        .Select(row => row.Select(r => r.ToString()!).Join(""))
+        .Join("\n");
+}
+
+public class DiagGrid<T> : Grid<T>
+{
+    public DiagGrid(List<List<T>> nums) : base(nums, true) { }
+}
+
+public class NoDiagGrid<T> : Grid<T>
+{
+    public NoDiagGrid(List<List<T>> nums) : base(nums, false) { }
 }
