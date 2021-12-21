@@ -133,5 +133,5 @@ static class LinqExt
         }
     }
 
-    public static string Join(this IEnumerable<object> t, string sep = ", ") => string.Join(sep, t);
+    public static string Join<T>(this IEnumerable<T> t, string sep = ", ") => string.Join(sep, t.Select(x => x?.ToString()));
 }

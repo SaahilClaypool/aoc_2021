@@ -138,3 +138,17 @@ public class NoDiagGrid<T> : Grid<T>
 {
     public NoDiagGrid(List<List<T>> nums) : base(nums, false) { }
 }
+
+
+public static class QueueExt
+{
+    public static T[] Dequeue<T>(this Queue<T> @this, int n)
+    {
+        var l = new List<T>(n);
+       foreach (var i in Range(0, n)) 
+       {
+           l.Add(@this.Dequeue());
+       }
+       return l.ToArray();
+    }
+}
