@@ -42,7 +42,10 @@ namespace Aoc.Runner
                 .AddColumn("time");
             foreach (var (test, failed, time) in failedTests)
             {
-                content.AddRow(failed ? "[red underline]Fail[/]" : "[green]Pass[/]", test.Name, test.ExpectedOutput, test.Output, $"{time.Milliseconds}ms");
+                content.AddRow(failed ? "[red underline]Fail[/]" : "[green]Pass[/]", test.Name,
+                    test.ExpectedOutput.EscapeMarkup(),
+                    test.Output.EscapeMarkup(),
+                    $"{time.Milliseconds}ms");
             }
             AnsiConsole.Write(content);
             return !failedTests.Any();

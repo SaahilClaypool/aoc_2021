@@ -9,7 +9,7 @@ public static class Fn
     public static T Clone<T>(this T @this) =>
         System.Text.Json.JsonSerializer.Deserialize<T>(@this.ToJson())!;
 
-    public static void DumpDict<K, V>(this Dictionary<K, V> @this) where K: notnull
+    public static void DumpDict<K, V>(this Dictionary<K, V> @this) where K : notnull
     {
         Console.WriteLine(@this.Select(kvp => $"[{kvp.Key}]: {kvp.Value}").Join("\n"));
     }
@@ -39,9 +39,27 @@ public static class Fn
             yield return cur;
         }
     }
+
+    public static IEnumerable<(T Left, T Right)> AllPairs<T>(this IList<T> @this, bool flipped = true)
+    {
+        foreach (var i in Range(0, @this.Count))
+        {
+            foreach (var j in Range(0, @this.Count))
+            {
+                if (i != j)
+                {
+                    yield return (@this[i], @this[j]);
+                    if (flipped)
+                    {
+                        yield return (@this[j], @this[i]);
+                    }
+                }
+            }
+        }
+    }
 }
 
-public class DefaultDict<K, V> : Dictionary<K, V> where K: notnull
+public class DefaultDict<K, V> : Dictionary<K, V> where K : notnull
 {
     private readonly Func<V> _default = () => default!;
     public DefaultDict()
@@ -145,10 +163,10 @@ public static class QueueExt
     public static T[] Dequeue<T>(this Queue<T> @this, int n)
     {
         var l = new List<T>(n);
-       foreach (var i in Range(0, n)) 
-       {
-           l.Add(@this.Dequeue());
-       }
-       return l.ToArray();
+        foreach (var i in Range(0, n))
+        {
+            l.Add(@this.Dequeue());
+        }
+        return l.ToArray();
     }
 }
