@@ -49,12 +49,13 @@ namespace Aoc.Runner
         private static bool IsTest = false;
         public static void SetTest() => IsTest = true;
 
-        public static void Log(string t)
+        public static T Log<T>(T t)
         {
             if (IsTest)
             {
-                Console.WriteLine(t);
+                Console.WriteLine(t?.ToString());
             }
+            return t;
         }
     }
 
